@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="ejecutarAjax()">Hazme click</button>
+    <div id="info"></div>
+
+
+    <script type="text/javascript">
+
+
+
+        function ejecutarAjax() {
+
+            var xhr; //1º - Nos creamos una variable (el nombre es lo de menos) donde posteriormente almacenaremos el objeto AJAX
+
+            if (window.XMLHttpRequest) {//2º - Cremos el objeto AJAX teniendo en cuenta cualquier tipo de navegador
+                xhr = new XMLHttpRequest(); //para los navegadores actuales
+            } else {
+                xhr = ActiveXObject("Microsoft.XMLHTTP");//para navegadores antiguos
+            }
+
+            //3º - Usamos la propiedad onreadystatechange, que se va a encargar de procesar la respuesta del servidor
+            xhr.onreadystatechange = function () {
+                /*propiedad readyState -> valores:
+                    0 Petición no ha sido inicializada
+                    1 Petición ha sido establecida
+                    2 Petición ha sido enviada
+                    3 Petición está siendo procesada
+                    4 Petición ha sido finalizada
+    
+                  propiedad status -> valores
+                    200: "OK"
+                    403: "Forbidden"
+                    404: "Not Found"
+                */
+                if (xhr.readyState == 4 && xhr.status == 200) {//4º - Si todo es correcto
+
+                    //5º - Creamos una referencia al div "info" para mostrar en él la información. La información 
+                    //     la recogmeos como cadena con el "método responseText". 
+                    document.getElementById("info").innerHTML = xhr.responseText;
+
+                }
+            }
+            /*6º - Recogemos la información del servidor con el método "open()". Que recibe obligatoriamente 3 parámetros.
+                method: si la petición es de tipo GET o POST
+                url: localización del fichero que contiene la información
+                async: true si es asíncrono
+                       false si no es asíncrono
+                       user: De forma opcional el nombre de un usuario
+                       psw: De forma opcional el password de un usuario
+            */
+            xhr.open("GET", "doc.txt", true);
+
+            //7º - Enviamos la información al navegador con el método "send()". 
+            xhr.send();
+        }
+
+
+    </script>
+</body>
+
+</html>
