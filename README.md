@@ -1,1 +1,1 @@
-Ajax-Aprendiendo2
+Repositorio para aprender Ajax
