@@ -13,6 +13,8 @@
 
     <script type="text/javascript">
 
+        //NESTED JSON.  Agrupación de varios objetos de Json dentro de un objeto de Json.
+
         //8º - Hacemos una referencia al div "info" para poder mostrar los datos
         var resultado = document.getElementById("info");
 
@@ -36,16 +38,18 @@
                     var datos = JSON.parse(xhr.responseText);
                     console.log(datos);
                     /*
-                    //7º - Recorremos el objeto para mostrar en el HTML los datos.
-                    for (var i in datos) {
-                        resultado.innerHTML += datos[i].nombre + " " + datos[i].apellido + " tiene " + datos[i].edad + "<hr/>";
-                    }
+                    
+                   
                     */
                     //9º - Vamos a hacer que no se repita la información al pulsar en el botón si ésta ya se muestra
                     if (resultado.innerHTML === "") {
-                        for (var i in datos) {
-                            //resultado.innerHTML += i + ": " + datos[i] + "</br>";
-                            resultado.innerHTML += datos[i].nombre + " " + datos[i].apellido + " tiene " + datos[i].edad + "<hr/>";
+                        for (var i in datos) {//7º - Recorremos el NESTED Json para mostrar en el HTML los datos.
+                            resultado.innerHTML += "<h3>" + i + "</h3>";
+                            var persona = datos[i];//almacenamos en persona el objeto Json correspondiente a la vuelta de bucle
+
+                            for (var j in persona) {//recorremos persona
+                                resultado.innerHTML += j + ": " + persona[j] + "</br>";
+                            }
                         }
                     }
                 }
