@@ -34,17 +34,18 @@
                            usamos "JSON.parse".
                          */
                     var datos = JSON.parse(xhr.responseText);
-                    //console.log(datos);
+                    console.log(datos);
                     /*
                     //7º - Recorremos el objeto para mostrar en el HTML los datos.
                     for (var i in datos) {
-                        resultado.innerHTML += i + ": " + datos[i] + "</br>";
+                        resultado.innerHTML += datos[i].nombre + " " + datos[i].apellido + " tiene " + datos[i].edad + "<hr/>";
                     }
                     */
                     //9º - Vamos a hacer que no se repita la información al pulsar en el botón si ésta ya se muestra
                     if (resultado.innerHTML === "") {
                         for (var i in datos) {
-                            resultado.innerHTML += i + ": " + datos[i] + "</br>";
+                            //resultado.innerHTML += i + ": " + datos[i] + "</br>";
+                            resultado.innerHTML += datos[i].nombre + " " + datos[i].apellido + " tiene " + datos[i].edad + "<hr/>";
                         }
                     }
                 }
