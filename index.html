@@ -5,20 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .encontrado {
+            color: green;
+        }
+
+        .no-encontrado {
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
-    <button onclick="ajax_get_json()">Mostrar Datos</button>
+    Buscar persona: <input type="text" onkeyup="ajax_get_json(this.value)">
     <div id="info"></div>
 
     <script type="text/javascript">
 
-        //8º - Hacemos una referencia al div "info" para poder mostrar los datos
-        var resultado = document.getElementById("info");
 
-        function ajax_get_json() {
+        function ajax_get_json(usuarioIngresado) {
 
             var xhr;
+            var resultado = document.getElementById("info");
 
             if (window.XMLHttpRequest) {
                 xhr = new XMLHttpRequest();
@@ -26,43 +34,37 @@
                 xhr = new ActiveXObject("Microsoft.XMLHTTP");
             }
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
+            if (usuarioIngresado.length === 0) {
+                resultado.innerHTML = "";
+            } else {
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
 
-                    var datos = JSON.parse(xhr.responseText);
+                        var datos = JSON.parse(xhr.responseText);
+                        var x = encontrarPersona(datos, usuarioIngresado);
+                        var mensaje = (x === true) ? "<span class = 'encontrado'> Si fue encontrado</span>" :
+                            "<span class = 'no-encontrado'> No fue encontrado</span>"
 
-                    //1º - Nos creamos una variable en la que almacenaremos el valor que devuelva una función a 
-                    //     la que pasamos por parametros el valor del Json.
-                    var edadMenor = encontrarEdadMenor(datos);
-
-                    //2º - Mostramos el valor almacenado en la variable creada (la edad menor) en nuestro HTML
-                    resultado.innerHTML += "La edad menor es: " + edadMenor;
+                        resultado.innerHTML = mensaje;
+                    }
                 }
+
+                xhr.open("GET", "datos.json", true);
+
+                xhr.send();
             }
 
-            xhr.open("GET", "datos.json", true);
-
-            xhr.send();
         }
 
         //3º - Desarrollamos nuestra función que encuentra la edad menor.
-        function encontrarEdadMenor(objetoJson) {
+        function encontrarPersona(objetoJson, nombreIngresado) {
             var arreglo = [];
 
             for (var i in objetoJson) {
-                var persona = objetoJson[i];
-                arreglo.push(persona.edad);
+                arreglo.push(objetoJson[i].nombre);
             }
 
-            var edadMenor = arreglo[0];
-
-            for (var j = 0; j < arreglo.length; j++) {
-                if (arreglo[j] < edadMenor) {
-                    edadMenor = arreglo[j];
-                }
-            }
-
-            return edadMenor;
+            return arreglo.indexOf(nombreIngresado) > -1;
         }
 
     </script>
