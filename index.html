@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="ajax_get_json()">Mostrar Datos</button>
+    <div id="info"></div>
+
+    <script type="text/javascript">
+
+        //8º - Hacemos una referencia al div "info" para poder mostrar los datos
+        var resultado = document.getElementById("info");
+
+        function ajax_get_json() {
+
+            var xhr; //1º - NOS DECLARAMOS LA VARIABLE "xhr", que es como se llamará nuestro objeto AJAX
+
+            if (window.XMLHttpRequest) { //2º - Obtenemos nuestro objeto AJAX independientemente del navegador que tengamos
+                xhr = new XMLHttpRequest();
+            } else {
+                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            //3º - Hacemos uso de la propiedad "onreadystatechange"
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    /*4º - Obtenemos nuestra información dentro de la variable datos. Originalmente la información 
+                           retorna en forma de cadena. Así que tenemos que convertirla a un objeto de JSON y para ello
+                           usamos "JSON.parse".
+                         */
+                    var datos = JSON.parse(xhr.responseText);
+                    //console.log(datos);
+                    /*
+                    //7º - Recorremos el objeto para mostrar en el HTML los datos.
+                    for (var i in datos) {
+                        resultado.innerHTML += i + ": " + datos[i] + "</br>";
+                    }
+                    */
+                    //9º - Vamos a hacer que no se repita la información al pulsar en el botón si ésta ya se muestra
+                    if (resultado.innerHTML === "") {
+                        for (var i in datos) {
+                            resultado.innerHTML += i + ": " + datos[i] + "</br>";
+                        }
+                    }
+                }
+            }
+
+            //5º - Usamos el método "open". Que como sabemos tiene tres parámetros obligatorios.
+            xhr.open("GET", "datos.json", true);
+
+            //6º - Por último usamos el método "send"
+            xhr.send();
+        }
+
+    </script>
+</body>
+
+</html>
