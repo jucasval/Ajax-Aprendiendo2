@@ -18,44 +18,51 @@
 
         function ajax_get_json() {
 
-            var xhr; //1º - NOS DECLARAMOS LA VARIABLE "xhr", que es como se llamará nuestro objeto AJAX
+            var xhr;
 
-            if (window.XMLHttpRequest) { //2º - Obtenemos nuestro objeto AJAX independientemente del navegador que tengamos
+            if (window.XMLHttpRequest) {
                 xhr = new XMLHttpRequest();
             } else {
                 xhr = new ActiveXObject("Microsoft.XMLHTTP");
             }
 
-            //3º - Hacemos uso de la propiedad "onreadystatechange"
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4 && xhr.status === 200) {
-                    /*4º - Obtenemos nuestra información dentro de la variable datos. Originalmente la información 
-                           retorna en forma de cadena. Así que tenemos que convertirla a un objeto de JSON y para ello
-                           usamos "JSON.parse".
-                         */
+
                     var datos = JSON.parse(xhr.responseText);
-                    console.log(datos);
-                    /*
-                    //7º - Recorremos el objeto para mostrar en el HTML los datos.
-                    for (var i in datos) {
-                        resultado.innerHTML += datos[i].nombre + " " + datos[i].apellido + " tiene " + datos[i].edad + "<hr/>";
-                    }
-                    */
-                    //9º - Vamos a hacer que no se repita la información al pulsar en el botón si ésta ya se muestra
-                    if (resultado.innerHTML === "") {
-                        for (var i in datos) {
-                            //resultado.innerHTML += i + ": " + datos[i] + "</br>";
-                            resultado.innerHTML += datos[i].nombre + " " + datos[i].apellido + " tiene " + datos[i].edad + "<hr/>";
-                        }
-                    }
+
+                    //1º - Nos creamos una variable en la que almacenaremos el valor que devuelva una función a 
+                    //     la que pasamos por parametros el valor del Json.
+                    var edadMenor = encontrarEdadMenor(datos);
+
+                    //2º - Mostramos el valor almacenado en la variable creada (la edad menor) en nuestro HTML
+                    resultado.innerHTML += "La edad menor es: " + edadMenor;
                 }
             }
 
-            //5º - Usamos el método "open". Que como sabemos tiene tres parámetros obligatorios.
             xhr.open("GET", "datos.json", true);
 
-            //6º - Por último usamos el método "send"
             xhr.send();
+        }
+
+        //3º - Desarrollamos nuestra función que encuentra la edad menor.
+        function encontrarEdadMenor(objetoJson) {
+            var arreglo = [];
+
+            for (var i in objetoJson) {
+                var persona = objetoJson[i];
+                arreglo.push(persona.edad);
+            }
+
+            var edadMenor = arreglo[0];
+
+            for (var j = 0; j < arreglo.length; j++) {
+                if (arreglo[j] < edadMenor) {
+                    edadMenor = arreglo[j];
+                }
+            }
+
+            return edadMenor;
         }
 
     </script>
