@@ -17,16 +17,19 @@
 </head>
 
 <body>
-    Buscar persona: <input type="text" onkeyup="ajax_get_json(this.value)">
-    <div id="info"></div>
+    <form action="">
+        Buscar persona: <input type="text" onkeyup="mostrarSugerencia(this.value)">
+    </form>
+    <p>Sugerencias: <span id="info"></span></p>
 
     <script type="text/javascript">
 
+        var resultado = document.getElementById("info");
 
-        function ajax_get_json(usuarioIngresado) {
+        function mostrarSugerencia(usuarioIngresado) {
 
             var xhr;
-            var resultado = document.getElementById("info");
+
 
             if (window.XMLHttpRequest) {
                 xhr = new XMLHttpRequest();
@@ -40,32 +43,16 @@
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
 
-                        var datos = JSON.parse(xhr.responseText);
-                        var x = encontrarPersona(datos, usuarioIngresado);
-                        var mensaje = (x === true) ? "<span class = 'encontrado'> Si fue encontrado</span>" :
-                            "<span class = 'no-encontrado'> No fue encontrado</span>"
+                        resultado.innerHTML = xhr.responseText;
 
-                        resultado.innerHTML = mensaje;
                     }
                 }
 
-                xhr.open("GET", "datos.json", true);
+                xhr.open("GET", "servidor.php?nombre=" + usuarioIngresado, true);
 
                 xhr.send();
             }
 
-        }
-
-
-        function encontrarPersona(objetoJson, nombreIngresado) {
-            var arreglo = [];
-
-            for (var i in objetoJson) {
-                arreglo.push(objetoJson[i].nombre);
-            }
-
-            return arreglo.indexOf(nombreIngresado) > -1;
-            //-1 es lo que devuelve si no hay un usuario encontrado
         }
 
     </script>
