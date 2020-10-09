@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <form action="">
+    <form>
         Buscar persona: <input type="text" onkeyup="mostrarSugerencia(this.value)">
     </form>
     <p>Sugerencias: <span id="info"></span></p>
@@ -26,7 +26,7 @@
 
         var resultado = document.getElementById("info");
 
-        function mostrarSugerencia(usuarioIngresado) {
+        function mostrarSugerencia(usuario) {
 
             var xhr;
 
@@ -37,8 +37,8 @@
                 xhr = new ActiveXObject("Microsoft.XMLHTTP");
             }
 
-            if (usuarioIngresado.length === 0) {
-                resultado.innerHTML = "";
+            if (usuario.length === 0) {
+                document.getElementById("info").innerHTML = "";
             } else {
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -48,7 +48,7 @@
                     }
                 }
 
-                xhr.open("GET", "servidor.php?nombre=" + usuarioIngresado, true);
+                xhr.open("GET", "servidor.php?nombre=" + usuario, true);
 
                 xhr.send();
             }

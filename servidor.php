@@ -21,12 +21,12 @@
                 if($sugerencia === ""){
                     $sugerencia = $persona;
                 }else{
-                    $sugerencia .= ", $persona"
+                    $sugerencia .= ", $persona";
                 }
             }
         }
 
-        echo $sugerencia === "" ? "No fue encontrado" : $sugerencia;l
+        echo $sugerencia == "" ? "No fue encontrado" : $sugerencia;
     }
 
 ?>
